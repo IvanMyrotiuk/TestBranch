@@ -1,0 +1,22 @@
+SELECT author.id, author.name, COUNT(news.id_author) as c FROM author
+JOIN news ON author.id = news.id_author
+GROUP BY author.id
+
+SELECT news.name AS header_news FROM news 
+WHERE news.id_rubric = (SELECT rubric.id FROM rubric WHERE rubric.name = "classical") AND 
+news.id_author IN (SELECT main_author.authorID FROM (SELECT author.id as authorID, author.name, COUNT(news.id_author) AS count FROM author
+JOIN news ON author.id = news.id_author
+GROUP BY author.id
+having count > (SELECT AVG(count_per_person.count) AS average  FROM (SELECT author.id, author.name, COUNT(news.id_author) AS count FROM author
+JOIN news ON author.id = news.id_author
+GROUP BY author.id) AS count_per_person) ) as main_author)
+SELECT news.name AS header_news FROM news 
+WHERE news.id_rubric = (SELECT rubric.id FROM rubric WHERE rubric.name = "classical") AND 
+news.id_author IN (SELECT main_author.authorID FROM (SELECT author.id as authorID, author.name, COUNT(news.id_author) AS count FROM author
+JOIN news ON author.id = news.id_author
+GROUP BY author.id
+having count > (SELECT AVG(count_per_person.count) AS average  FROM (SELECT author.id, author.name, COUNT(news.id_author) AS count FROM author
+JOIN news ON author.id = news.id_author
+GROUP BY author.id) AS count_per_person) ) as main_author)
+
+insert into news(id_author, id_rubric, name, news, video_link) values(3, 8, "Classical music Lilu", "Lilu for music..","www.news.com/music");
